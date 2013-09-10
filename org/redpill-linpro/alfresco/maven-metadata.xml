@@ -4,7 +4,7 @@
     <plugin>
       <name>Maven plugin for building Dynamic Extension projects.</name>
       <prefix>dynamicextensions</prefix>
-      <artifactId>maven-dynamicextensions-plugin</artifactId>
+      <artifactId>dynamicextensions-maven-plugin</artifactId>
     </plugin>
   </plugins>
 </metadata>
