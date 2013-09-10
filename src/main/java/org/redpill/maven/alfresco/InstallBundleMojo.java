@@ -45,51 +45,51 @@ public class InstallBundleMojo extends AbstractMojo {
   /**
    * The username to authenticate the call for.
    */
-  @Parameter(property = "admin", defaultValue = RestClient.DEFAULT_USERNAME)
-  private String _username;
+  @Parameter(property = "username", defaultValue = RestClient.DEFAULT_USERNAME)
+  private String username;
 
   /**
    * The password to authenticate the call for.
    */
-  @Parameter(property = "admin", defaultValue = RestClient.DEFAULT_PASSWORD)
-  private String _password;
+  @Parameter(property = "password", defaultValue = RestClient.DEFAULT_PASSWORD)
+  private String password;
 
   /**
    * The mimetype to use for the upload
    */
   @Parameter(property = "mimetype", defaultValue = DEFAULT_MIMETYPE)
-  private String _mimetype;
+  private String mimetype;
 
   /**
    * The hostname to upload to
    */
   @Parameter(property = "hostname", defaultValue = RestClient.DEFAULT_HOST)
-  private String _hostname;
+  private String hostname;
 
   /**
    * The port of the host to upload to
    */
   @Parameter(property = "port", defaultValue = RestClient.DEFAULT_PORT)
-  private String _port;
+  private String port;
 
   /**
    * The servicePath to upload to
    */
   @Parameter(property = "servicePath", defaultValue = RestClient.DEFAULT_SERVICE_PATH)
-  private String _servicePath;
+  private String servicePath;
 
   /**
    * The path to upload to
    */
   @Parameter(property = "path", defaultValue = DEFAULT_PATH)
-  private String _path;
+  private String path;
 
   @Parameter(defaultValue = "${project.artifact}", required = true, readonly = true)
-  private Artifact _artifact;
+  private Artifact artifact;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    File file = _artifact.getFile();
+    File file = artifact.getFile();
 
     if (!file.exists()) {
       throw new MojoFailureException("File not found: " + file.getAbsolutePath());
@@ -99,8 +99,8 @@ public class InstallBundleMojo extends AbstractMojo {
       throw new IllegalArgumentException("Not a JAR file: " + file.getAbsolutePath());
     }
 
-    RestClient _client = new RestClient(getLog(), _username, _password, _hostname, _port, _servicePath);
+    RestClient _client = new RestClient(getLog(), username, password, hostname, port, servicePath);
 
-    _client.postFile(_path, file, _mimetype);
+    _client.postFile(path, file, mimetype);
   }
 }
