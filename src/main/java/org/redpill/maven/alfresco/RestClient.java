@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.apache.commons.net.telnet.TelnetClient;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -67,6 +68,12 @@ public class RestClient {
   }
 
   public void postFile(String path, File file, String mimetype) {
+    // then do a ping to see if the server is up, if not, log and just exit
+    if (!ping()) {
+      _log.info("Can't contact " + _host + " on port " + _port + ", exiting...");
+      return;
+    }
+
     HttpHost targetHost = new HttpHost(_host, Integer.parseInt(_port), "http");
 
     CredentialsProvider credsProvider = new BasicCredentialsProvider();
@@ -99,9 +106,11 @@ public class RestClient {
 
       httppost.setEntity(reqEntity);
 
-      CloseableHttpResponse response = httpclient.execute(targetHost, httppost, localContext);
+      CloseableHttpResponse response = null;
 
       try {
+        response = httpclient.execute(targetHost, httppost, localContext);
+
         HttpEntity resEntity = response.getEntity();
 
         int statusCode = response.getStatusLine().getStatusCode();
@@ -132,10 +141,10 @@ public class RestClient {
 
         EntityUtils.consume(resEntity);
       } finally {
-        response.close();
+        closeQuietly(response);
       }
     } catch (Exception ex) {
-      throw new RuntimeException(ex);
+      _log.error("Can't contact " + _host + " on port " + _port + ", exiting...");
     } finally {
       closeQuietly(httpclient);
     }
@@ -145,6 +154,18 @@ public class RestClient {
     try {
       closeable.close();
     } catch (Exception ex) {
+    }
+  }
+
+  private boolean ping() {
+    try {
+      TelnetClient telnetClient = new TelnetClient();
+      telnetClient.setDefaultTimeout(500);
+      telnetClient.connect(_host, Integer.parseInt(_port));
+
+      return true;
+    } catch (Exception ex) {
+      return false;
     }
   }
 
