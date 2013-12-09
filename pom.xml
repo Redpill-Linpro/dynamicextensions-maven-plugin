@@ -4,14 +4,11 @@
   <groupId>org.redpill-linpro.alfresco</groupId>
   <artifactId>dynamicextensions-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <name>Maven plugin for building Dynamic Extension projects.</name>
-  <url>http://maven.apache.org</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!-- github server corresponds to entry in ~/.m2/settings.xml -->
-    <github.global.server>github</github.global.server>
   </properties>
 
   <organization>
@@ -52,17 +49,15 @@
       <artifactId>json-simple</artifactId>
       <version>1.1.1</version>
     </dependency>
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>3.3</version>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
-        <configuration>
-          <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -71,37 +66,6 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.github.github</groupId>
-        <artifactId>site-maven-plugin</artifactId>
-        <version>0.8</version>
-        <configuration>
-          <!-- git commit message -->
-          <message>Maven artifacts for ${project.version}</message>
-          <!-- disable webpage processing -->
-          <noJekyll>true</noJekyll>
-          <!-- matches distribution management repository url above -->
-          <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-          <!-- remote branch name -->
-          <branch>refs/heads/mvn-repo</branch>
-          <includes>
-            <include>**/*</include>
-          </includes>
-          <!-- github repo name -->
-          <repositoryName>dynamicextensions-maven-plugin</repositoryName>
-          <!-- github username -->
-          <repositoryOwner>oakman</repositoryOwner>
-        </configuration>
-        <executions>
-          <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
-          <execution>
-            <goals>
-              <goal>site</goal>
-            </goals>
-            <phase>deploy</phase>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -118,13 +82,6 @@
               <goal>descriptor</goal>
             </goals>
           </execution>
-          <!-- if you want to generate help goal -->
-          <execution>
-            <id>help-goal</id>
-            <goals>
-              <goal>helpmojo</goal>
-            </goals>
-          </execution>
         </executions>
       </plugin>
     </plugins>
@@ -132,10 +89,13 @@
 
   <distributionManagement>
     <repository>
-      <id>github</id>
-      <name>GitHub ${project.artifactId} Repository</name>
-      <url>https://raw.github.com/oakman/${project.artifactId}/mvn-repo</url>
+      <id>redpill-linpro-releases</id>
+      <url>http://maven.redpill-linpro.com/nexus/content/repositories/releases</url>
     </repository>
+    <snapshotRepository>
+      <id>redpill-linpro-snapshots</id>
+      <url>http://maven.redpill-linpro.com/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
   </distributionManagement>
 
 </project>
