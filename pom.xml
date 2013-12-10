@@ -87,6 +87,17 @@
     </plugins>
   </build>
 
+  <repositories>
+    <repository>
+      <id>redpill-linpro</id>
+      <url>http://maven.redpill-linpro.com/nexus/content/groups/public</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <distributionManagement>
     <repository>
       <id>redpill-linpro-releases</id>
