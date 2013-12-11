@@ -70,7 +70,7 @@ public class RestClient {
   public void postFile(String path, File file, String mimetype) {
     // then do a ping to see if the server is up, if not, log and just exit
     if (!ping()) {
-      _log.info("Can't contact " + _host + " on port " + _port + ", exiting...");
+      _log.info("Can't contact (ping) " + _host + " on port " + _port + ", exiting...");
       return;
     }
 
@@ -144,7 +144,7 @@ public class RestClient {
         closeQuietly(response);
       }
     } catch (Exception ex) {
-      _log.error("Can't contact " + _host + " on port " + _port + ", exiting...");
+      _log.error("Can't contact (deploy) " + _host + " on port " + _port + ", exiting...", ex);
     } finally {
       closeQuietly(httpclient);
     }
